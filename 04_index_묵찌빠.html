@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+
+        .player-select, 
+        .com-select{
+            width: 180px;
+            height: 154px;
+
+            background-image: url(./img/img.png);
+            background-repeat: no-repeat;
+            border: 1px solid;
+        
+            background-size: 440px;
+            /* ❓❓❓❓❓❓❓❓❓❓ */
+            background-position-x: 25px;
+        
+        }
+
+        /* 바위 */
+        .rock {
+            background-position-x: 25px;
+        }
+        
+        
+        .paper {
+            background-position-x: -265px;
+        }
+        
+        .scissors {
+            background-position-x: -121px;
+        }
+
+        .game-wrap {
+
+            display: flex;
+
+        }
+
+
+    </style>
+
+</head>
+<body>
+
+    
+    <!-- 필요한거 생각
+        1) 가위 바위 보 버튼 -->
+
+
+    <!-- 게임 이미지 전체적으로 감싸는 곳 -->
+    <div class="game-wrap">
+        
+        <!-- player 가 선택한 이미지 -->
+            <!-- 버튼 누를 때 > 클래스를 붙이면 된다 ⭐⭐⭐⭐⭐⭐⭐ -->
+        <div class="player-select"> </div>
+        
+        <div class="com-select"> </div>
+    
+    </div>
+
+    <!-- 결과표시 -->
+    <h1 class="result"> 결과 </h1>
+    <p class="subResult"> 내용 </p>
+
+
+    <button class="player-btn"> 가위 </button>
+    <button class="player-btn"> 보 </button>
+    <button class="player-btn"> 바위 </button>
+
+
+</body>
+
+
+<script>
+
+
+
+
+// 🟦 전역변수 모음 
+    // 버튼을 눌렀을 때 > 클래스가 붙으면 된다. 
+    // 클래스의 이름으로 사용하고, 결과에서도 사용할 '가위, 바위, 보' 를 담은 문자배열 만들자
+    let gameArr = [ "scissors", "paper", "rock"];
+    
+    // 버튼들도 담아두고 
+    let playerBtns = document.querySelectorAll('.player-btn')
+    
+    // player 선택한 결과를 보여줄 태그
+    let playerSelect = document.querySelector('.player-select')
+
+    // 컴퓨터의 결과를 보여줄 태그 (화면만 만들것)
+
+    function init() {
+
+        // 버튼 초기화 
+        gameArr.forEach(function(item, index) {
+            // 순서대로, 가위, 보, 바위 들어가도록!
+            // scissors", "paper", "rock" 순서대로 item 에 담긴다. 
+            // index = 0, 1, 2 이 순서대로
+            // playerBtns[0], playerBtns[1], plapyerBtns[2]
+                // 첫 번째 버튼, 두 번째 버튼, 세 번째 버튼 순서로 반복이 된다.  
+            playerBtns[index].addEventListener('click' , function() {
+                // 클릭했을 때 내용을 이제 넣어주면 된다. 
+
+                // player 가 선택한 가위바위보  보여주는 태그
+                // 클래스 유지하되, player-select 클래스 유지하고, 새로운 클래스 추가해주자 
+                playerSelect.className = "player-select " + item;
+                    // 원래 있는 클래스는 유지
+                    // "player-select "
+                        // 띄어쓰기 있어야 함 ⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐⭐ 
+            
+            // 함수에 '리턴값'이 있으니까 > 구조분해할당으로 받을 수 있어 ⭐⭐⭐ 
+            let {value, text} = gameStart(item);
+
+            // 결과
+            document.querySelector('.result').innerHTML = value;
+            
+            // 내용
+            document.querySelector('.subResult').innerHTML = text;
+
+            })
+
+        })
+
+    }
+    init();
+
+    // 플레이어의 선택을 받고 비교
+    function gameStart(player) {
+        // 여기에서 컴퓨터 선택 ⭐⭐
+        // 랜덤값으로 gameArr 배열 안에 있는 가위, 바위, 보를 가져온다. 
+        let comSelect = gameArr[Math.floor(Math.random() * gameArr.length)];
+
+        document.querySelector('.com-select').className = "com-select " + comSelect;
+        // "com-select " 한칸 띄워야 
+
+
+        // 승패 판단
+
+            // 무승부 거르고 시작
+            if(player == comSelect) {
+                return {value : "무승부" , text : '다시 하셈~'}
+
+                // && 둘 다 true 일 때, || 는 둘 중 하나만 true 일 때
+                // player 가 이기는 조건들 모음 
+            } else if (player == "rock" && comSelect == "scissors" || 
+            player == 'paper' && comSelect == 'rock' ||
+            player == 'scissors' && comSelect == 'paper' ) {
+                // 여기서 이기는 조건을 만들어보자 
+                return { value : '승리', text : '축축'}
+
+            } else {
+                // 이 뒤는 이제, player 패배 조건, 
+
+                return { value : '패배', text : '다시 도전~'}
+            }
+
+            // 이 함수를 실행하면, '반환값' 이 '객체' 임. 
+
+        }
+
+
+
+</script>
+
+</html>
